@@ -1,4 +1,11 @@
 #include "sink_server.h"
+#include "boost/program_options.hpp"
+
+#define THREADS_COUNT "threads_count"
+#define PGW_SGI_IP_ADDR "pgw_sgi_ip_addr"
+#define SINK_IP_ADDR "sink_ip_addr"
+#define PGW_SGI_PORT "pgw_sgi_port"
+#define SINK_PORT "sink_port"
 
 int g_threads_count;
 vector<thread> g_threads;
@@ -39,15 +46,7 @@ void sink(int sink_num) {
 	system(cmd.c_str());
 }
 
-void check_usage(int argc) {
-	if (argc < 2) {
-		TRACE(cout << "Usage: ./<sink_server_exec> THREADS_COUNT" << endl;)
-				g_utils.handle_type1_error(-1, "Invalid usage error: sinkserver_checkusage");
-	}
-}
-
-void init(char *argv[]) {
-	g_threads_count = atoi(argv[1]);
+void init() {
 	g_threads.resize(g_threads_count);
 	pgw_sgi_clients.resize(g_threads_count);
 
@@ -82,9 +81,39 @@ void run() {
 	}	
 }
 
+void readConfig(int ac, char *av[]) {
+  namespace po = boost::program_options;
+  using namespace std;
+
+  po::options_description desc("Allowed options");
+  desc.add_options()
+    (THREADS_COUNT, po::value<int>(), "Number of server threads")
+    (PGW_SGI_IP_ADDR, po::value<string>(), "IP addres of PGW's SGI interface")
+    (SINK_IP_ADDR, po::value<string>(), "IP address of the sink")
+
+    (PGW_SGI_PORT, po::value<int>()->default_value(g_pgw_sgi_port), "Port of the PGW's SGI interface")
+    (SINK_PORT, po::value<int>()->default_value(g_pgw_sgi_port), "Port of the sink")
+    ;
+  po::variables_map vm;
+  po::store(po::parse_command_line(ac, av, desc), vm);
+  po::notify(vm);
+
+  if (vm.count(THREADS_COUNT) ||
+      vm.count(PGW_SGI_IP_ADDR) ||
+      vm.count(SINK_IP_ADDR)) {
+    TRACE(cout << desc << endl;)
+  }
+
+  g_threads_count = vm[THREADS_COUNT].as<int>();
+  g_pgw_sgi_ip_addr = vm[PGW_SGI_IP_ADDR].as<string>();
+  g_sink_ip_addr = vm[SINK_IP_ADDR].as<string>();
+  g_pgw_sgi_port = vm[PGW_SGI_PORT].as<int>();
+  g_sink_port = vm[SINK_PORT].as<int>();
+}
+
 int main(int argc, char *argv[]) {
-	check_usage(argc);
-	init(argv);
-	run();
-	return 0;
+  readConfig(argc, argv);
+  init();
+  run();
+  return 0;
 }

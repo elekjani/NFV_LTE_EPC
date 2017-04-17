@@ -28,9 +28,7 @@ void check_usage(int argc) {
 	}
 }
 
-void init(char *argv[]) {
-	g_s5_server_threads_count = atoi(argv[1]);
-	g_sgi_server_threads_count = atoi(argv[2]);
+void init() {
 	g_s5_server_threads.resize(g_s5_server_threads_count);
 	g_sgi_server_threads.resize(g_sgi_server_threads_count);
 	g_pgw.initialize_kvstore_clients(g_s5_server_threads_count);
@@ -166,7 +164,6 @@ void readConfig(int ac, char *av[]) {
   g_s5_server_threads_count = vm[S5_THREADS_COUNT].as<int>();
   g_sgi_server_threads_count = vm[SGI_THREADS_COUNT].as<int>();
 
-
   g_sgw_s5_ip_addr = vm[SGW_S5_IP].as<string>();
   g_pgw_s5_ip_addr = vm[PGW_S5_IP].as<string>();
   g_pgw_sgi_ip_addr = vm[PGW_SGI_IP].as<string>();
@@ -181,7 +178,7 @@ void readConfig(int ac, char *av[]) {
 
 int main(int argc, char *argv[]) {
   readConfig(argc, argv);
-  init(argv);
+  init();
   run();
   return 0;
 }

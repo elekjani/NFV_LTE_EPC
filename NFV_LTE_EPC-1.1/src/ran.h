@@ -21,6 +21,8 @@ extern string g_trafmon_ip_addr;
 extern string g_mme_ip_addr;
 extern int g_trafmon_port;
 extern int g_mme_port;
+extern string g_sgw_s1_ip_addr;
+extern int sgw_s1_port;
 
 class RanContext {
 public:

@@ -21,8 +21,7 @@ int g_workers_count;
 vector<SctpClient> hss_clients;
 vector<UdpClient> sgw_s11_clients;
 
-void init(char *argv[]) {
-	g_workers_count = atoi(argv[1]);
+void init() {
 	hss_clients.resize(g_workers_count);
 	sgw_s11_clients.resize(g_workers_count);
 	g_mme.initialize_kvstore_clients(g_workers_count);
@@ -166,7 +165,7 @@ void readConfig(int ac, char *av[]) {
 
 int main(int argc, char *argv[]) {
   readConfig(argc, argv);
-  init(argv);
+  init();
   run();
   return 0;
 }

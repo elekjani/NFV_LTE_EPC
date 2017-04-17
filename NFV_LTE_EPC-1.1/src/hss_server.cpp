@@ -9,8 +9,7 @@
 Hss g_hss;
 int g_workers_count;
 
-void init(char *argv[]) {
-	g_workers_count = atoi(argv[1]);
+void init() {
 	g_hss.initialize_kvstore_clients(g_workers_count); //error handling
 	signal(SIGPIPE, SIG_IGN);
 
@@ -84,7 +83,7 @@ void readConfig(int ac, char *av[]) {
 
 int main(int argc, char *argv[]) {
   readConfig(argc, argv);
-  init(argv);
+  init();
   run();
   finish();
   return 0;

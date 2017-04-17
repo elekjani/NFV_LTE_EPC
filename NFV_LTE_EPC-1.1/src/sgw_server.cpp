@@ -1,4 +1,16 @@
 #include "sgw_server.h"
+#include "boost/program_options.hpp"
+
+#define S11_THREADS_COUNT "s11_threads_count"
+#define S1_THREADS_COUNT "s1_threads_count"
+#define S5_THREADS_COUNT "s5_threads_count"
+
+#define SGW_S11_IP_ADDR "sgw_s11_ip_addr"
+#define SGW_S1_IP_ADDR "sgw_s1_ip_addr"
+#define SGW_S5_IP_ADDR "sgw_s5_ip_addr"
+#define SGW_S11_PORT "sgw_s11_port"
+#define SGW_S1_PORT "sgw_s1_port"
+#define SGW_S5_PORT "sgw_s5_port"
 
 int g_s11_server_threads_count;
 int g_s1_server_threads_count;
@@ -10,17 +22,7 @@ vector<UdpClient> pgw_s5_clients;
 
 Sgw g_sgw;
 
-void check_usage(int argc) {
-	if (argc < 4) {
-		TRACE(cout << "Usage: ./<sgw_server_exec> S11_SERVER_THREADS_COUNT S1_SERVER_THREADS_COUNT S5_SERVER_THREADS_COUNT" << endl;)
-						g_utils.handle_type1_error(-1, "Invalid usage error: sgwserver_checkusage");
-	}
-}
-
-void init(char *argv[]) {
-	g_s11_server_threads_count = atoi(argv[1]);
-	g_s1_server_threads_count = atoi(argv[2]);
-	g_s5_server_threads_count = atoi(argv[3]);
+void init() {
 	g_s11_server_threads.resize(g_s11_server_threads_count);
 	g_s1_server_threads.resize(g_s1_server_threads_count);
 	g_s5_server_threads.resize(g_s5_server_threads_count);
@@ -165,9 +167,53 @@ void handle_s5_traffic(int worker_id) {
 	}			
 }
 
+void readConfig(int ac, char *av[]) {
+  namespace po = boost::program_options;
+  using namespace std;
+
+  po::options_description desc("Allowed options");
+  desc.add_options()
+    (S5_THREADS_COUNT, po::value<int>(), "Number of S5 server threads")
+    (S11_THREADS_COUNT, po::value<int>(), "Number of S11 server threads")
+    (S1_THREADS_COUNT, po::value<int>(), "Number of S1 server threads")
+
+    (SGW_S11_IP_ADDR, po::value<string>(), "IP address of SGW's S11 interface")
+    (SGW_S1_IP_ADDR, po::value<string>(), "IP address of SGW's S1 interface")
+    (SGW_S5_IP_ADDR, po::value<string>(), "IP address of SGW's S5 interface")
+
+    (SGW_S11_PORT, po::value<int>()->default_value(g_sgw_s11_port), "Port of the SGW's S11 interface")
+    (SGW_S1_PORT, po::value<int>()->default_value(g_sgw_s1_port), "Port of the SGW's S1 interface")
+    (SGW_S5_PORT, po::value<int>()->default_value(g_sgw_s5_port), "Port of the SGW's S5 interface")
+    ;
+  po::variables_map vm;
+  po::store(po::parse_command_line(ac, av, desc), vm);
+  po::notify(vm);
+
+  if (vm.count(S5_THREADS_COUNT) ||
+      vm.count(S11_THREADS_COUNT) ||
+      vm.count(S1_THREADS_COUNT) ||
+      vm.count(SGW_S11_IP_ADDR) ||
+      vm.count(SGW_S1_IP_ADDR) ||
+      vm.count(SGW_S5_IP_ADDR)) {
+    TRACE(cout << desc << endl;)
+  }
+
+
+  g_s11_server_threads_count = vm[S11_THREADS_COUNT].as<int>();
+  g_s1_server_threads_count = vm[S1_THREADS_COUNT].as<int>();
+  g_s5_server_threads_count = vm[S5_THREADS_COUNT].as<int>();
+
+  g_sgw_s11_ip_addr = vm[SGW_S11_IP_ADDR].as<string>();
+  g_sgw_s1_ip_addr = vm[SGW_S1_IP_ADDR].as<string>();
+  g_sgw_s5_ip_addr = vm[SGW_S5_IP_ADDR].as<string>();
+  g_sgw_s11_port = vm[SGW_S11_PORT].as<int>();
+  g_sgw_s1_port = vm[SGW_S1_PORT].as<int>();
+  g_sgw_s5_port = vm[SGW_S5_PORT].as<int>();
+}
+
 int main(int argc, char *argv[]) {
-	check_usage(argc);
-	init(argv);cout<<"suc inint"<<endl;
-	run();cout<<"suc inint2"<<endl;
-	return 0;
+  readConfig(argc, argv);
+  init();cout<<"suc inint"<<endl;
+  run();cout<<"suc inint2"<<endl;
+  return 0;
 }

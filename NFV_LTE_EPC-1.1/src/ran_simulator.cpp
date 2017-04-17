@@ -1,4 +1,16 @@
 #include "ran_simulator.h"
+#include "boost/program_options.hpp"
+
+#define THREADS_COUNT "threads_count"
+#define DURATION "duration"
+
+#define RAN_IP_ADDR "ran_ip_addr"
+#define TRAFMON_IP_ADDR "trafmon_ip_addr"
+#define MME_IP_ADDR "mme_ip_addr"
+#define TRAFMON_PORT "trafmon_port"
+#define MME_PORT "mme_port"
+#define SGW_S1_IP_ADDR "sgw_s1_ip_addr"
+#define SGW_S1_PORT "sgw_s1_port"
 
 time_t g_start_time;
 int g_threads_count;
@@ -112,17 +124,8 @@ void simulate(int arg) {
 	}
 }
 
-void check_usage(int argc) {
-	if (argc < 3) {
-		TRACE(cout << "Usage: ./<ran_simulator_exec> THREADS_COUNT DURATION" << endl;)
-				g_utils.handle_type1_error(-1, "Invalid usage error: ransimulator_checkusage");
-	}
-}
-
-void init(char *argv[]) {
+void init() {
 	g_start_time = time(0);
-	g_threads_count = atoi(argv[1]);
-	g_req_dur = atoi(argv[2]);
 	g_tot_regs = 0;
 	g_tot_regstime = 0;
 	g_sync.mux_init(g_mux);	
@@ -162,10 +165,51 @@ void print_results() {
 	//cout<<((double)g_tot_regs/g_run_dur)<<" "<<((double)g_tot_regstime/g_tot_regs) * 1e-6<<endl;
 }
 
+void readConfig(int ac, char *av[]) {
+  namespace po = boost::program_options;
+  using namespace std;
+
+  po::options_description desc("Allowed options");
+  desc.add_options()
+    (THREADS_COUNT, po::value<int>(), "Number of threads")
+    (DURATION, po::value<int>(), "Duration in seconds")
+    (RAN_IP_ADDR, po::value<string>(), "IP address of the simulator")
+    (TRAFMON_IP_ADDR, po::value<string>(), "IP address of the traffic monitor")
+    (MME_IP_ADDR, po::value<string>(), "IP address of the MME")
+    (TRAFMON_PORT, po::value<int>()->default_value(g_trafmon_port), "Port of the trraffic monitor")
+    (MME_PORT, po::value<int>()->default_value(g_mme_port), "Port of the MME")
+    (SGW_S1_IP_ADDR, po::value<string>(), "IP address of SGW's S1 interface")
+    (SGW_S1_PORT, po::value<int>()->default_value(sgw_s1_port), "Port of SGW's S1 interface")
+    ;
+  po::variables_map vm;
+  po::store(po::parse_command_line(ac, av, desc), vm);
+  po::notify(vm);
+
+  if (vm.count(THREADS_COUNT) ||
+      vm.count(DURATION) ||
+      vm.count(RAN_IP_ADDR) ||
+      vm.count(TRAFMON_IP_ADDR) ||
+      vm.count(MME_IP_ADDR) ||
+      vm.count(SGW_S1_IP_ADDR)) {
+    TRACE(cout << desc << endl;)
+  }
+
+  g_req_dur = vm[DURATION].as<int>();;
+  g_threads_count = vm[THREADS_COUNT].as<int>();;
+
+  g_ran_ip_addr = vm[RAN_IP_ADDR].as<string>();
+  g_trafmon_ip_addr = vm[TRAFMON_IP_ADDR].as<string>();
+  g_mme_ip_addr = vm[MME_IP_ADDR].as<string>();
+  g_trafmon_port = vm[TRAFMON_PORT].as<int>();
+  g_mme_port = vm[MME_PORT].as<int>();
+  g_sgw_s1_ip_addr = vm[SGW_S1_IP_ADDR].as<string>();
+  sgw_s1_port = vm[SGW_S1_PORT].as<int>();
+}
+
 int main(int argc, char *argv[]) {
-	check_usage(argc);
-	init(argv);
-	run();
-	print_results();
-	return 0;
+  readConfig(argc, argv);
+  init();
+  run();
+  print_results();
+  return 0;
 }

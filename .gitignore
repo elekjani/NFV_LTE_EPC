@@ -1,0 +1,6 @@
+*.o
+*.out
+tags
+*.swp
+NFV_LTE_EPC-1.1/scripts/kvstore/Implementation/LevelDB_Disk/server/deps/
+*.a

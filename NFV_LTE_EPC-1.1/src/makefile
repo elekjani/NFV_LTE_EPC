@@ -25,7 +25,7 @@ hss.o:	diameter.h gtp.h hss.cpp hss.h  network.h packet.h s1ap.h sctp_server.h s
 	$(G++) -c -o  hss.o hss.cpp -Wno-deprecated -lboost_serialization
 
 hss_server.o:	diameter.h gtp.h hss.h hss_server.cpp hss_server.h network.h packet.h s1ap.h sctp_server.h sync.h utils.h
-	$(G++) -c -o hss_server.o hss_server.cpp	
+	$(G++) -c -o hss_server.o hss_server.cpp
 
 mme.o:	diameter.h gtp.h mme.cpp mme.h network.h packet.h s1ap.h sctp_client.h sctp_server.h security.h sync.h telecom.h udp_client.h utils.h
 	$(G++) -c -o mme.o mme.cpp -Wno-deprecated -lboost_serialization
@@ -99,22 +99,22 @@ utils.o:	utils.cpp utils.h
 #---------Prerequisites and Recipes---------#
 
 HSS_P = diameter.o gtp.o hss.o hss_server.o  network.o packet.o s1ap.o sctp_server.o sync.o utils.o
-HSS_R = $(G++) -o hss.out $(HSS_P) -pthread -lboost_serialization -Wno-deprecated -lkvstore
+HSS_R = $(G++) -o hss.out $(HSS_P) -pthread -lboost_serialization -Wno-deprecated -lkvstore -lboost_program_options
 
 MME_P = diameter.o gtp.o mme.o mme_server.o network.o packet.o s1ap.o sctp_client.o sctp_server.o security.o sync.o telecom.o udp_client.o utils.o
-MME_R = $(G++) -o mme.out $(MME_P) -pthread -lcrypto -lboost_serialization -Wno-deprecated
+MME_R = $(G++) -o mme.out $(MME_P) -pthread -lcrypto -lboost_serialization -Wno-deprecated -lboost_program_options
 
 PGW_P = diameter.o gtp.o network.o packet.o pgw.o pgw_server.o s1ap.o sync.o udp_client.o udp_server.o utils.o
-PGW_R = $(G++) -o pgw.out $(PGW_P) -pthread -Wno-deprecated -lboost_serialization -lkvstore
+PGW_R = $(G++) -o pgw.out $(PGW_P) -pthread -Wno-deprecated -lboost_serialization -lkvstore -lboost_program_options
 
 RAN_P = diameter.o gtp.o network.o packet.o ran.o ran_simulator.o s1ap.o sctp_client.o security.o sync.o telecom.o tun.o udp_client.o udp_server.o utils.o
-RAN_R = $(G++) -o ransim.out $(RAN_P) -pthread -lcrypto
+RAN_R = $(G++) -o ransim.out $(RAN_P) -pthread -lcrypto -lboost_program_options
 
 SGW_P = diameter.o gtp.o network.o packet.o s1ap.o sgw.o sgw_server.o sync.o udp_client.o udp_server.o utils.o
-SGW_R = $(G++) -o sgw.out $(SGW_P) -pthread -lboost_serialization -lkvstore
+SGW_R = $(G++) -o sgw.out $(SGW_P) -pthread -lboost_serialization -lkvstore -lboost_program_options
 
 SINK_P = diameter.o gtp.o network.o packet.o s1ap.o sink.o sink_server.o tun.o udp_client.o udp_server.o utils.o
-SINK_R = $(G++) -o sink.out $(SINK_P) -pthread
+SINK_R = $(G++) -o sink.out $(SINK_P) -pthread -lboost_program_options
 
 #-------------------------------------------#
 
