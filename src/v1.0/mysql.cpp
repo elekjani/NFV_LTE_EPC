@@ -3,7 +3,7 @@
 ConnInfo::ConnInfo() {
 	server = "localhost";
 	user = "root";
-	passwd = "mysql";
+	passwd = "hurka";
 	db = "hss";
 }
 

@@ -1,9 +1,9 @@
 #include "pgw.h"
 
-string g_sgw_s5_ip_addr = "192.168.1.74";
-string g_pgw_s5_ip_addr = "192.168.1.76";
-string g_pgw_sgi_ip_addr = "192.168.1.76";
-string g_sink_ip_addr = "192.168.1.82";
+string g_sgw_s5_ip_addr = "127.0.0.1";
+string g_pgw_s5_ip_addr = "127.0.0.1";
+string g_pgw_sgi_ip_addr = "127.0.0.1";
+string g_sink_ip_addr = "127.0.0.1";
 int g_sgw_s5_port = 7200;
 int g_pgw_s5_port = 8000;
 int g_pgw_sgi_port = 8100;

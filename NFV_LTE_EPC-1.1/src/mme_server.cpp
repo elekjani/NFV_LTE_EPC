@@ -1,16 +1,25 @@
 #include "mme_server.h"
+#include "boost/program_options.hpp"
+
+#define THREADS_COUNT "threads_count"
+#define HSS_IP "hss_ip"
+#define HSS_PORT "hss_port"
+#define SGW_S1_IP "sgw_s1_ip"
+#define SGW_S11_IP "sgw_s11_ip"
+#define SGW_S5_IP "sgw_s5_ip"
+#define PGW_S5_IP "pgw_s5_ip"
+
+#define TRAFMON_PORT "trafmon_port"
+#define MME_PORT "mme_port"
+#define SGW_S11_PORT "sgw_s11_port"
+#define SGW_S1_PORT "sgw_s1_port"
+#define SGW_S5_PORT "sgw_s5_port"
+#define PGW_S5_PORT "pgw_s5_port"
 
 Mme g_mme;
 int g_workers_count;
 vector<SctpClient> hss_clients;
 vector<UdpClient> sgw_s11_clients;
-
-void check_usage(int argc) {
-	if (argc < 2) {
-		TRACE(cout << "Usage: ./<mme_server_exec> THREADS_COUNT" << endl;)
-				g_utils.handle_type1_error(-1, "Invalid usage error: mmeserver_checkusage");
-	}
-}
 
 void init(char *argv[]) {
 	g_workers_count = atoi(argv[1]);
@@ -104,9 +113,60 @@ int handle_ue(int conn_fd, int worker_id) {
 	return 1;
 }
 
+void readConfig(int ac, char *av[]) {
+  namespace po = boost::program_options;
+  using namespace std;
+
+  po::options_description desc("Allowed options");
+  desc.add_options()
+    (THREADS_COUNT, po::value<int>(), "Number of threads")
+    (HSS_IP, po::value<string>(), "IP addres of the HSS")
+    (HSS_PORT, po::value<int>()->default_value(g_hss_port), "Port of the HSS")
+    (SGW_S1_IP, po::value<string>(), "IP address of SGW's S1 interface")
+    (SGW_S11_IP, po::value<string>(), "IP address of SGW's S11 interface")
+    (SGW_S5_IP, po::value<string>(), "IP address of SGW's S5 interface")
+    (PGW_S5_IP, po::value<string>(), "IP address of PGW's S5 interface")
+
+    (TRAFMON_PORT, po::value<int>()->default_value(g_trafmon_port), "Port of the traffic monitor")
+    (MME_PORT, po::value<int>()->default_value(g_mme_port), "Port of the MME")
+    (SGW_S11_PORT, po::value<int>()->default_value(g_sgw_s11_port), "Port of the SGW's S11 interface")
+    (SGW_S1_PORT, po::value<int>()->default_value(g_sgw_s1_port), "Port of the SGW's S1 interface")
+    (SGW_S5_PORT, po::value<int>()->default_value(g_sgw_s5_port), "Port of the SGW's S5 interface")
+    (PGW_S5_PORT, po::value<int>()->default_value(g_pgw_s5_port), "Port of the PGW's S5 interface")
+    ;
+
+  po::variables_map vm;
+  po::store(po::parse_command_line(ac, av, desc), vm);
+  po::notify(vm);
+
+  if (vm.count(THREADS_COUNT) ||
+      vm.count(HSS_IP) ||
+      vm.count(SGW_S1_IP) ||
+      vm.count(SGW_S11_IP) ||
+      vm.count(SGW_S5_IP) ||
+      vm.count(PGW_S5_IP)) {
+    TRACE(cout << desc << endl;)
+  }
+
+  g_workers_count = vm[THREADS_COUNT].as<int>();
+  g_hss_ip_addr =  vm[HSS_IP].as<string>();
+  g_hss_port = vm[HSS_PORT].as<int>();
+
+  g_sgw_s11_ip_addr = vm[SGW_S1_IP].as<string>();
+  g_sgw_s1_ip_addr = vm[SGW_S5_IP].as<string>();
+  g_sgw_s5_ip_addr = vm[SGW_S11_IP].as<string>();
+  g_pgw_s5_ip_addr = vm[PGW_S5_IP].as<string>();
+
+  g_trafmon_port = vm[TRAFMON_PORT].as<int>();
+  g_mme_port = vm[MME_PORT].as<int>();
+  g_sgw_s11_port = vm[SGW_S11_PORT].as<int>();
+  g_sgw_s1_port = vm[SGW_S1_PORT].as<int>();
+  g_sgw_s5_port = vm[SGW_S5_PORT].as<int>();
+}
+
 int main(int argc, char *argv[]) {
-	check_usage(argc);
-	init(argv);
-	run();
-	return 0;
+  readConfig(argc, argv);
+  init(argv);
+  run();
+  return 0;
 }

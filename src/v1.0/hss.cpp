@@ -1,6 +1,6 @@
 #include "hss.h"
 
-string g_hss_ip_addr = "192.168.1.80";
+string g_hss_ip_addr = "127.0.0.1";
 int g_hss_port = 6000;
 
 Hss::Hss() {

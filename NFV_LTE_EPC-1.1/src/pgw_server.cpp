@@ -1,4 +1,18 @@
 #include "pgw_server.h"
+#include "boost/program_options.hpp"
+
+#define S5_THREADS_COUNT "s5_threads_count"
+#define SGI_THREADS_COUNT "sgi_threads_count"
+
+#define SGW_S5_IP "sgw_s5_ip"
+#define PGW_S5_IP "pgw_s5_ip"
+#define PGW_SGI_IP "pgw_sgi_ip"
+#define SINK_IP_ADDR "sink_ip_addr"
+
+#define SGW_S5_PORT "sgw_s5_port"
+#define PGW_S5_PORT "pgw_s5_port"
+#define PGW_SGI_PORT "pgw_sgi_port"
+#define SINK_PORT "sink_port"
 
 int g_s5_server_threads_count;
 int g_sgi_server_threads_count;
@@ -116,9 +130,58 @@ void handle_sgi_traffic(int worker_id) {
 	}	
 }
 
+void readConfig(int ac, char *av[]) {
+  namespace po = boost::program_options;
+  using namespace std;
+
+  po::options_description desc("Allowed options");
+  desc.add_options()
+    (S5_THREADS_COUNT, po::value<int>(), "Number of S5 server threads")
+    (SGI_THREADS_COUNT, po::value<int>(), "Number of SGI server threads")
+    (SGW_S5_IP, po::value<string>(), "IP address of SGW's S5 interface")
+    (PGW_S5_IP, po::value<string>(), "IP address of PGW's S5 interface")
+    (PGW_SGI_IP, po::value<string>(), "IP address of PGW's SGI interface")
+    (SINK_IP_ADDR, po::value<string>(), "IP address of the sink")
+
+    (SGW_S5_PORT, po::value<int>()->default_value(g_sgw_s5_port), "Port of the SGW's S5 interface")
+    (PGW_S5_PORT, po::value<int>()->default_value(g_pgw_s5_port), "Port of the PGW's S5 interface")
+    (PGW_SGI_PORT, po::value<int>()->default_value(g_pgw_sgi_port), "Port of the PGW's SGI interface")
+    (SINK_PORT, po::value<int>()->default_value(g_sink_port), "Port of the sink")
+    ;
+
+
+  po::variables_map vm;
+  po::store(po::parse_command_line(ac, av, desc), vm);
+  po::notify(vm);
+
+  if (vm.count(S5_THREADS_COUNT) ||
+      vm.count(SGI_THREADS_COUNT) ||
+      vm.count(SGW_S5_IP) ||
+      vm.count(PGW_S5_IP) ||
+      vm.count(PGW_SGI_IP) ||
+      vm.count(SINK_IP_ADDR)) {
+    TRACE(cout << desc << endl;)
+  }
+
+  g_s5_server_threads_count = vm[S5_THREADS_COUNT].as<int>();
+  g_sgi_server_threads_count = vm[SGI_THREADS_COUNT].as<int>();
+
+
+  g_sgw_s5_ip_addr = vm[SGW_S5_IP].as<string>();
+  g_pgw_s5_ip_addr = vm[PGW_S5_IP].as<string>();
+  g_pgw_sgi_ip_addr = vm[PGW_SGI_IP].as<string>();
+  g_sink_ip_addr = vm[SINK_IP_ADDR].as<string>();
+
+  g_sgw_s5_port = vm[SGW_S5_PORT].as<int>();
+  g_pgw_s5_port = vm[PGW_S5_PORT].as<int>();
+  g_pgw_sgi_port = vm[PGW_SGI_PORT].as<int>();
+  g_sink_port = vm[SINK_PORT].as<int>();
+
+}
+
 int main(int argc, char *argv[]) {
-	check_usage(argc);
-	init(argv);
-	run();
-	return 0;
+  readConfig(argc, argv);
+  init(argv);
+  run();
+  return 0;
 }

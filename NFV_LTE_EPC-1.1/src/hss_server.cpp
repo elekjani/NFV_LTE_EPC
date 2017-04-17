@@ -1,14 +1,13 @@
 #include "hss_server.h"
+#include "boost/program_options.hpp"
+#include <iostream>
+
+#define THREADS_COUNT "threads_count"
+#define HSS_IP "hss_ip"
+#define HSS_PORT "hss_port"
 
 Hss g_hss;
 int g_workers_count;
-
-void check_usage(int argc) {
-	if (argc < 2) {
-		TRACE(cout << "Usage: ./<hss_server_exec> THREADS_COUNT" << endl;)
-				g_utils.handle_type1_error(-1, "Invalid usage error: hssserver_checkusage");
-	}
-}
 
 void init(char *argv[]) {
 	g_workers_count = atoi(argv[1]);
@@ -58,10 +57,35 @@ int handle_mme(int conn_fd, int worker_id) {
 void finish() {
 }
 
+void readConfig(int ac, char *av[]) {
+  namespace po = boost::program_options;
+  using namespace std;
+
+  po::options_description desc("Allowed options");
+  desc.add_options()
+    (THREADS_COUNT, po::value<int>(), "Number of threads")
+    (HSS_IP, po::value<string>(), "IP addres of the HSS")
+    (HSS_PORT, po::value<int>()->default_value(g_hss_port), "Port of the HSS")
+    ;
+
+  po::variables_map vm;
+  po::store(po::parse_command_line(ac, av, desc), vm);
+  po::notify(vm);
+
+  if (vm.count(THREADS_COUNT) ||
+      vm.count(HSS_IP)) {
+    TRACE(cout << desc << endl;)
+  }
+
+  g_workers_count = vm[THREADS_COUNT].as<int>();
+  g_hss_ip_addr =  vm[HSS_IP].as<string>();
+  g_hss_port = vm[HSS_PORT].as<int>();
+}
+
 int main(int argc, char *argv[]) {
-	check_usage(argc);
-	init(argv);
-	run();
-	finish();
-	return 0;
+  readConfig(argc, argv);
+  init(argv);
+  run();
+  finish();
+  return 0;
 }
