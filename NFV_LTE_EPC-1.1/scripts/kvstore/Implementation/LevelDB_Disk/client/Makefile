@@ -6,6 +6,7 @@ OPLEVEL = 0
 OPL =
 TC = 50
 
+MKDIR_P = mkdir -p
 
 IMPLPATH = src
 BINPATH = bin
@@ -21,9 +22,18 @@ ifneq ($(OPLEVEL),0)
 OPL = -O$(OPLEVEL)
 endif
 
-all:	$(BINPATH)/KVStoreNonTemplateImplLevelDB.o
+all: directories $(BINPATH)/KVStoreNonTemplateImplLevelDB.o
 
-$(BINPATH)/kvstore_client.o: 
+.PHONY: directories
+
+directories: ${BINPATH} ${TESTBIN}
+
+${BINPATH}:
+	${MKDIR_P} ${BINPATH}
+${TESTBIN}:
+	${MKDIR_P} ${TESTBIN}
+
+$(BINPATH)/kvstore_client.o:
 #	$(GCC) $(SHOWWARN) $(OPL) -o $(BINPATH)/kvstore_client.o -c ../../../Helper/src/kvstore_client.cpp
 
 $(BINPATH)/KVStoreNonTemplateImplLevelDB.o:	$(BINPATH)/kvstore_client.o $(IMPLPATH)/KVStoreImplLevelDB.cpp $(IMPLPATH)/KVStoreNonTemplateImplLevelDB.cpp ../../../Interface/KVStoreHeader.h $(IMPLPATH)/KVStore.h
