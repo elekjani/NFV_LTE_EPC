@@ -160,7 +160,9 @@ void readConfig(int ac, char *av[]) {
   g_sgw_s1_ip_addr = vm[SGW_S5_IP].as<string>();
   g_sgw_s5_ip_addr = vm[SGW_S11_IP].as<string>();
   g_pgw_s5_ip_addr = vm[PGW_S5_IP].as<string>();
-  dsmme_path = vm[DS_IP].as<string>();
+  std::stringstream sstm;
+  sstm << vm[DS_IP].as<string>() << ':' << vm[DS_PORT].as<string>();
+  dsmme_path = sstm.str();
 
   g_trafmon_port = vm[TRAFMON_PORT].as<int>();
   g_mme_port = vm[MME_PORT].as<int>();
