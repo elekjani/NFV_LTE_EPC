@@ -1,6 +1,6 @@
 #include "pgw.h"
 #define SGI_ID "ds_sgi_id"
-#define S5_ID "ds_s5_id"
+#define S5_ID "ds_pgw_s5_id"
 
 string g_sgw_s5_ip_addr = SGWLB;
 string g_pgw_s5_ip_addr = PGW;

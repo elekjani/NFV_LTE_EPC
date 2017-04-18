@@ -17,9 +17,11 @@
 extern string g_sgw_s11_ip_addr;
 extern string g_sgw_s1_ip_addr;
 extern string g_sgw_s5_ip_addr;
+extern string g_pgw_s5_ip_addr;
 extern int g_sgw_s11_port;
 extern int g_sgw_s1_port;
 extern int g_sgw_s5_port;
+extern int g_pgw_s5_port;
 const string dssgw_path = "10.129.28.152:8090";
 
 
