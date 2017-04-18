@@ -9,6 +9,7 @@
 #define PGW_SGI_IP "pgw_sgi_ip"
 #define SINK_IP_ADDR "sink_ip_addr"
 #define DS_IP "ds_ip"
+#define DS_PORT "ds_port"
 
 #define SGW_S5_PORT "sgw_s5_port"
 #define PGW_S5_PORT "pgw_s5_port"
@@ -142,6 +143,7 @@ void readConfig(int ac, char *av[]) {
     (PGW_SGI_IP, po::value<string>(), "IP address of PGW's SGI interface")
     (SINK_IP_ADDR, po::value<string>(), "IP address of the sink")
     (DS_IP, po::value<string>(), "IP address of the datastore")
+    (DS_PORT, po::value<string>(), "Port of the datastore")
 
     (SGW_S5_PORT, po::value<int>()->default_value(g_sgw_s5_port), "Port of the SGW's S5 interface")
     (PGW_S5_PORT, po::value<int>()->default_value(g_pgw_s5_port), "Port of the PGW's S5 interface")
