@@ -14,8 +14,6 @@
 #include "udp_client.h"
 
 #include "utils.h"
-#define MIP "10.129.28.33"
-
 
 extern string g_trafmon_ip_addr;
 extern string g_mme_ip_addr;

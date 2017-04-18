@@ -44,7 +44,7 @@ void run() {
 	/* downlink clients */
 	sgw_s5_clients.resize(g_s5_server_threads_count);
 	for (i = 0; i < g_sgi_server_threads_count; i++) {
-		sgw_s5_clients[i].conn(PGW,SGWLB,7200);
+		sgw_s5_clients[i].conn(g_pgw_s5_ip_addr,g_sgw_s5_ip_addr,g_sgw_s5_port);
 	}
 	/* PGW S5 server */
 	TRACE(cout << "PGW S5 server started" << endl;)

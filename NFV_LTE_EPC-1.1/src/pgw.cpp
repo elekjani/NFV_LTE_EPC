@@ -2,11 +2,11 @@
 #define SGI_ID "ds_sgi_id"
 #define S5_ID "ds_pgw_s5_id"
 
-string g_sgw_s5_ip_addr = SGWLB;
-string g_pgw_s5_ip_addr = PGW;
-string g_pgw_sgi_ip_addr = PGW;
-string g_sink_ip_addr = "10.129.28.19";
-string dspgw_path = "10.129.28.113:8090";
+string g_sgw_s5_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
+string g_pgw_s5_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
+string g_pgw_sgi_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
+string g_sink_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
+string dspgw_path = "INVALID_IP_MUST_BE_INIT_WITH_CLI:8090";
 int g_sgw_s5_port = 7200;
 int g_pgw_s5_port = 8000;
 int g_pgw_sgi_port = 8100;

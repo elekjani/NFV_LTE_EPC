@@ -1,14 +1,14 @@
 #include "mme.h"
 
-string g_trafmon_ip_addr = "10.129.26.175";
-string g_mme_ip_addr = MME;
+string g_trafmon_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
+string g_mme_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
 
-string g_hss_ip_addr = "10.129.28.108";
-string g_sgw_s11_ip_addr = SGWLB;
-string g_sgw_s1_ip_addr = SGWLB;
-string g_sgw_s5_ip_addr = SGWLB;
-string g_pgw_s5_ip_addr = PGWLB;
-string dsmme_path = "10.129.26.223:8090";
+string g_hss_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
+string g_sgw_s11_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
+string g_sgw_s1_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
+string g_sgw_s5_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
+string g_pgw_s5_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
+string dsmme_path = "INVALID_IP_MUST_BE_INIT_WITH_CLI:8090";
 
 int g_trafmon_port = 4000;
 int g_mme_port = 5000;

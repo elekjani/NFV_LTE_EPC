@@ -54,19 +54,6 @@ using namespace kvstore;
 typedef std::chrono::high_resolution_clock CLOCK;
 typedef std::chrono::microseconds MICROSECONDS;
 
-
-#define MME "10.129.26.104"
-//#define MME "10.129.28.33" //for other parallel replicas
-
-#define SGW "10.129.28.191"
-//#define SGW "10.129.28.224" //for other parallel replicas
-
-#define PGW "10.129.28.147"
-//#define PGW "10.129.26.101" //for other parallel replicas
-
-#define MMELB "10.129.26.199"
-#define SGWLB "10.129.26.200"
-#define PGWLB "10.129.26.201"
 #define INIT_VAL 100000000   // to set with different init value for other mme replicas e.g. next replica could start with 700000000
 
 #define TRACE(x) if (DEBUG) { x }

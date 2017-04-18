@@ -1,8 +1,8 @@
 #include "hss.h"
 
-string g_hss_ip_addr = "10.129.28.108";
+string g_hss_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
 int g_hss_port = 6000;
-string ds_path = "10.129.28.108:8090";
+string ds_path = "INVALID_IP_MUST_BE_INIT_WITH_CLI:8090";
 
 Hss::Hss() {
 

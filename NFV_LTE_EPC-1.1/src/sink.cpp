@@ -1,8 +1,8 @@
 #include "sink.h"
 #include <algorithm>
 
-string g_pgw_sgi_ip_addr = "10.129.26.201";
-string g_sink_ip_addr = "10.129.28.19";
+string g_pgw_sgi_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
+string g_sink_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
 int g_pgw_sgi_port = 8100;
 int g_sink_port = 8500;
 

@@ -1,11 +1,11 @@
 #include "ran.h"
 
-string g_ran_ip_addr = "10.129.26.175";
-string g_trafmon_ip_addr = "10.129.26.175";
-string g_mme_ip_addr = "10.129.26.199";//"10.129.41.30";
+string g_ran_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
+string g_trafmon_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
+string g_mme_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
 int g_trafmon_port = 4000;
 int g_mme_port = 5000;
-string g_sgw_s1_ip_addr = "10.129.26.200";
+string g_sgw_s1_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
 int sgw_s1_port = 7100;
 
 RanContext::RanContext() {

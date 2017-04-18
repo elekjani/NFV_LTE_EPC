@@ -1,13 +1,13 @@
 #include "sgw.h"
 
-string g_sgw_s11_ip_addr = SGW;
-string g_sgw_s1_ip_addr = SGW;
-string g_sgw_s5_ip_addr = SGW;
-string dssgw_path = "10.129.28.152:8090";
+string g_sgw_s11_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
+string g_sgw_s1_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
+string g_sgw_s5_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
+string dssgw_path = "INVALID_IP_MUST_BE_INIT_WITH_CLI:8090";
 int g_sgw_s11_port = 7000;
 int g_sgw_s1_port = 7100;
 int g_sgw_s5_port = 7200;
-string g_pgw_s5_ip_addr = PGWLB;
+string g_pgw_s5_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
 int g_pgw_s5_port = 8000;
 UeContext::UeContext() {
 	tai = 0; 
