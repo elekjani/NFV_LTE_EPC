@@ -174,7 +174,7 @@ void readConfig(int ac, char *av[]) {
   g_pgw_sgi_ip_addr = vm[PGW_SGI_IP].as<string>();
   g_sink_ip_addr = vm[SINK_IP_ADDR].as<string>();
   std::stringstream sstm;
-  sstm << vm[DS_IP].as<string>() << ':' << vm[DS_PORT].as<string>();
+  sstm << vm[DS_IP].as<string>() << ':' << vm[DS_PORT].as<int>();
   dspgw_path = sstm.str();
 
   g_sgw_s5_port = vm[SGW_S5_PORT].as<int>();

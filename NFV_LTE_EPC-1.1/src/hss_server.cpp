@@ -85,7 +85,7 @@ void readConfig(int ac, char *av[]) {
   g_hss_ip_addr =  vm[HSS_IP].as<string>();
   g_hss_port = vm[HSS_PORT].as<int>();
   std::stringstream sstm;
-  sstm << vm[DS_IP].as<string>() << ':' << vm[DS_PORT].as<string>();
+  sstm << vm[DS_IP].as<string>() << ':' << vm[DS_PORT].as<int>();
   ds_path = sstm.str();
 }
 
