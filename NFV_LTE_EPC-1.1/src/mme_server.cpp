@@ -8,6 +8,7 @@
 #define SGW_S11_IP "sgw_s11_ip"
 #define SGW_S5_IP "sgw_s5_ip"
 #define PGW_S5_IP "pgw_s5_ip"
+#define DS_IP "ds_ip"
 
 #define TRAFMON_PORT "trafmon_port"
 #define MME_PORT "mme_port"
@@ -125,6 +126,7 @@ void readConfig(int ac, char *av[]) {
     (SGW_S11_IP, po::value<string>(), "IP address of SGW's S11 interface")
     (SGW_S5_IP, po::value<string>(), "IP address of SGW's S5 interface")
     (PGW_S5_IP, po::value<string>(), "IP address of PGW's S5 interface")
+    (DS_IP, po::value<string>(), "IP address of datastore")
 
     (TRAFMON_PORT, po::value<int>()->default_value(g_trafmon_port), "Port of the traffic monitor")
     (MME_PORT, po::value<int>()->default_value(g_mme_port), "Port of the MME")
@@ -143,6 +145,7 @@ void readConfig(int ac, char *av[]) {
       vm.count(SGW_S1_IP) ||
       vm.count(SGW_S11_IP) ||
       vm.count(SGW_S5_IP) ||
+      vm.count(DS_IP) ||
       vm.count(PGW_S5_IP)) {
     TRACE(cout << desc << endl;)
   }
@@ -155,6 +158,7 @@ void readConfig(int ac, char *av[]) {
   g_sgw_s1_ip_addr = vm[SGW_S5_IP].as<string>();
   g_sgw_s5_ip_addr = vm[SGW_S11_IP].as<string>();
   g_pgw_s5_ip_addr = vm[PGW_S5_IP].as<string>();
+  dsmme_path = vm[DS_IP].as<string>();
 
   g_trafmon_port = vm[TRAFMON_PORT].as<int>();
   g_mme_port = vm[MME_PORT].as<int>();

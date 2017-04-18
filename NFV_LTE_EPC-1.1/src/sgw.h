@@ -22,7 +22,7 @@ extern int g_sgw_s11_port;
 extern int g_sgw_s1_port;
 extern int g_sgw_s5_port;
 extern int g_pgw_s5_port;
-const string dssgw_path = "10.129.28.152:8090";
+extern string dssgw_path;
 
 
 class UeContext {

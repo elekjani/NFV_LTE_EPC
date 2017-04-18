@@ -8,6 +8,7 @@
 #define PGW_S5_IP "pgw_s5_ip"
 #define PGW_SGI_IP "pgw_sgi_ip"
 #define SINK_IP_ADDR "sink_ip_addr"
+#define DS_IP "ds_ip"
 
 #define SGW_S5_PORT "sgw_s5_port"
 #define PGW_S5_PORT "pgw_s5_port"
@@ -140,6 +141,7 @@ void readConfig(int ac, char *av[]) {
     (PGW_S5_IP, po::value<string>(), "IP address of PGW's S5 interface")
     (PGW_SGI_IP, po::value<string>(), "IP address of PGW's SGI interface")
     (SINK_IP_ADDR, po::value<string>(), "IP address of the sink")
+    (DS_IP, po::value<string>(), "IP address of the datastore")
 
     (SGW_S5_PORT, po::value<int>()->default_value(g_sgw_s5_port), "Port of the SGW's S5 interface")
     (PGW_S5_PORT, po::value<int>()->default_value(g_pgw_s5_port), "Port of the PGW's S5 interface")
@@ -157,6 +159,7 @@ void readConfig(int ac, char *av[]) {
       vm.count(SGW_S5_IP) ||
       vm.count(PGW_S5_IP) ||
       vm.count(PGW_SGI_IP) ||
+      vm.count(DS_IP) ||
       vm.count(SINK_IP_ADDR)) {
     TRACE(cout << desc << endl;)
   }
@@ -168,6 +171,7 @@ void readConfig(int ac, char *av[]) {
   g_pgw_s5_ip_addr = vm[PGW_S5_IP].as<string>();
   g_pgw_sgi_ip_addr = vm[PGW_SGI_IP].as<string>();
   g_sink_ip_addr = vm[SINK_IP_ADDR].as<string>();
+  dspgw_path = vm[DS_IP].as<string>();
 
   g_sgw_s5_port = vm[SGW_S5_PORT].as<int>();
   g_pgw_s5_port = vm[PGW_S5_PORT].as<int>();

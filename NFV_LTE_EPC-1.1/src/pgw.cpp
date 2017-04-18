@@ -6,6 +6,7 @@ string g_sgw_s5_ip_addr = SGWLB;
 string g_pgw_s5_ip_addr = PGW;
 string g_pgw_sgi_ip_addr = PGW;
 string g_sink_ip_addr = "10.129.28.19";
+string dspgw_path = "10.129.28.113:8090";
 int g_sgw_s5_port = 7200;
 int g_pgw_s5_port = 8000;
 int g_pgw_sgi_port = 8100;

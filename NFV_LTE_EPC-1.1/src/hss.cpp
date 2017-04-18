@@ -2,6 +2,7 @@
 
 string g_hss_ip_addr = "10.129.28.108";
 int g_hss_port = 6000;
+string ds_path = "10.129.28.108:8090";
 
 Hss::Hss() {
 

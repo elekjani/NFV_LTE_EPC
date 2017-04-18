@@ -10,7 +10,7 @@
 #include "sync.h"
 #include "utils.h"
 
-const string ds_path = "10.129.28.108:8090";
+extern string ds_path;
 
 using namespace kvstore;
 

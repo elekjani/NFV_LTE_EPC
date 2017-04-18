@@ -3,6 +3,7 @@
 string g_sgw_s11_ip_addr = SGW;
 string g_sgw_s1_ip_addr = SGW;
 string g_sgw_s5_ip_addr = SGW;
+string dssgw_path = "10.129.28.152:8090";
 int g_sgw_s11_port = 7000;
 int g_sgw_s1_port = 7100;
 int g_sgw_s5_port = 7200;

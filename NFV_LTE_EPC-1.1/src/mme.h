@@ -33,7 +33,7 @@ extern int g_sgw_s5_port;
 extern int g_pgw_s5_port;
 extern uint64_t g_timer;
 
-const string dsmme_path = "10.129.26.223:8090";
+extern string dsmme_path;
 class UeContext {
 public:
 	/* EMM state 

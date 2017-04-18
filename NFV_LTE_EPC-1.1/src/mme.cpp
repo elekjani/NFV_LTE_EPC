@@ -8,6 +8,7 @@ string g_sgw_s11_ip_addr = SGWLB;
 string g_sgw_s1_ip_addr = SGWLB;
 string g_sgw_s5_ip_addr = SGWLB;
 string g_pgw_s5_ip_addr = PGWLB;
+string dsmme_path = "10.129.26.223:8090";
 
 int g_trafmon_port = 4000;
 int g_mme_port = 5000;
