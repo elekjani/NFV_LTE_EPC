@@ -186,7 +186,7 @@ void readConfig(int ac, char *av[]) {
     (SGW_S5_IP_ADDR, po::value<string>(), "IP address of SGW's S5 interface")
     (PGW_S5_IP_ADDR, po::value<string>(), "IP address of PGW's S5 interface")
     (DS_IP, po::value<string>(), "IP address of the datastore")
-    (DS_PORT, po::value<int>(), "Port of the datastore")
+    (DS_PORT, po::value<int>()->default_value(8090), "Port of the datastore")
 
     (SGW_S11_PORT, po::value<int>()->default_value(g_sgw_s11_port), "Port of the SGW's S11 interface")
     (SGW_S1_PORT, po::value<int>()->default_value(g_sgw_s1_port), "Port of the SGW's S1 interface")

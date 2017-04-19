@@ -67,7 +67,7 @@ void readConfig(int ac, char *av[]) {
     (THREADS_COUNT, po::value<int>(), "Number of threads")
     (HSS_IP, po::value<string>(), "IP addres of the HSS")
     (DS_IP, po::value<string>(), "IP addres of the datastore")
-    (DS_PORT, po::value<int>(), "Port of the datastore")
+    (DS_PORT, po::value<int>()->default_value(8090), "Port of the datastore")
     (HSS_PORT, po::value<int>()->default_value(g_hss_port), "Port of the HSS")
     ;
 
