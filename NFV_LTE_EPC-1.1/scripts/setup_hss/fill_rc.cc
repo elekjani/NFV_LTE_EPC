@@ -28,7 +28,10 @@ int main(int argc, char* argv[]) {
   bool allok = true;
   while (value2 < 1e5) {
     if(value2 > p) {
-      cout << p << endl;
+      if(argc > 1)
+        cout << "Loaded IMSIs(#" << p << "): " << value1 - p << ".." << value1 << endl;
+      else
+        cout << "Checked IMSIs(#" << p << "): " << value1 - p << ".." << value1 << endl;
       p += p;
     }
     Authinfo obj;
