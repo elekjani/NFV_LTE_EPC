@@ -118,9 +118,8 @@ void simulate(int arg) {
 		/* Updating performance metrics */
 		g_sync.mlock(g_mux);
 		g_tot_regs++;
-		g_tot_regstime += mtime_diff_us.count();		
+		g_tot_regstime += mtime_diff_us.count();
 		g_sync.munlock(g_mux);
-
 	}
 }
 
@@ -174,9 +173,9 @@ void readConfig(int ac, char *av[]) {
     (THREADS_COUNT, po::value<int>(), "Number of threads")
     (DURATION, po::value<int>(), "Duration in seconds")
     (RAN_IP_ADDR, po::value<string>(), "IP address of the simulator")
-    (TRAFMON_IP_ADDR, po::value<string>(), "IP address of the traffic monitor")
+    //(TRAFMON_IP_ADDR, po::value<string>(), "IP address of the traffic monitor")
     (MME_IP_ADDR, po::value<string>(), "IP address of the MME")
-    (TRAFMON_PORT, po::value<int>()->default_value(g_trafmon_port), "Port of the trraffic monitor")
+    //(TRAFMON_PORT, po::value<int>()->default_value(g_trafmon_port), "Port of the trraffic monitor")
     (MME_PORT, po::value<int>()->default_value(g_mme_port), "Port of the MME")
     (SGW_S1_IP_ADDR, po::value<string>(), "IP address of SGW's S1 interface")
     (SGW_S1_PORT, po::value<int>()->default_value(sgw_s1_port), "Port of SGW's S1 interface")
@@ -185,22 +184,25 @@ void readConfig(int ac, char *av[]) {
   po::store(po::parse_command_line(ac, av, desc), vm);
   po::notify(vm);
 
-  if (vm.count(THREADS_COUNT) ||
-      vm.count(DURATION) ||
-      vm.count(RAN_IP_ADDR) ||
-      vm.count(TRAFMON_IP_ADDR) ||
-      vm.count(MME_IP_ADDR) ||
-      vm.count(SGW_S1_IP_ADDR)) {
+  bool reqMissing = false;
+  reqMissing |= vm.find(THREADS_COUNT) == vm.end();
+  reqMissing |= vm.find(DURATION) == vm.end();
+  reqMissing |= vm.find(RAN_IP_ADDR) == vm.end();
+  //reqMissing |= vm.find(TRAFMON_IP_ADDR) == vm.end();
+  reqMissing |= vm.find(MME_IP_ADDR) == vm.end();
+  reqMissing |=  vm.find(SGW_S1_IP_ADDR) == vm.end();
+  if (reqMissing) {
     TRACE(cout << desc << endl;)
+    exit(1);
   }
 
   g_req_dur = vm[DURATION].as<int>();;
   g_threads_count = vm[THREADS_COUNT].as<int>();;
 
   g_ran_ip_addr = vm[RAN_IP_ADDR].as<string>();
-  g_trafmon_ip_addr = vm[TRAFMON_IP_ADDR].as<string>();
+  //g_trafmon_ip_addr = vm[TRAFMON_IP_ADDR].as<string>();
   g_mme_ip_addr = vm[MME_IP_ADDR].as<string>();
-  g_trafmon_port = vm[TRAFMON_PORT].as<int>();
+  //g_trafmon_port = vm[TRAFMON_PORT].as<int>();
   g_mme_port = vm[MME_PORT].as<int>();
   g_sgw_s1_ip_addr = vm[SGW_S1_IP_ADDR].as<string>();
   sgw_s1_port = vm[SGW_S1_PORT].as<int>();

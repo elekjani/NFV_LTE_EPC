@@ -197,15 +197,18 @@ void readConfig(int ac, char *av[]) {
   po::store(po::parse_command_line(ac, av, desc), vm);
   po::notify(vm);
 
-  if (vm.count(S5_THREADS_COUNT) ||
-      vm.count(S11_THREADS_COUNT) ||
-      vm.count(S1_THREADS_COUNT) ||
-      vm.count(SGW_S11_IP_ADDR) ||
-      vm.count(SGW_S1_IP_ADDR) ||
-      vm.count(PGW_S5_IP_ADDR) ||
-      vm.count(DS_IP) ||
-      vm.count(SGW_S5_IP_ADDR)) {
+  bool reqMissing = false;
+  reqMissing |= vm.find(S5_THREADS_COUNT) == vm.end();
+  reqMissing |= vm.find(S11_THREADS_COUNT) == vm.end();
+  reqMissing |= vm.find(S1_THREADS_COUNT) == vm.end();
+  reqMissing |= vm.find(SGW_S11_IP_ADDR) == vm.end();
+  reqMissing |= vm.find(SGW_S1_IP_ADDR) == vm.end();
+  reqMissing |= vm.find(PGW_S5_IP_ADDR) == vm.end();
+  reqMissing |= vm.find(DS_IP) == vm.end();
+  reqMissing |= vm.find(SGW_S5_IP_ADDR) == vm.end();
+  if (reqMissing) {
     TRACE(cout << desc << endl;)
+    exit(1);
   }
 
 

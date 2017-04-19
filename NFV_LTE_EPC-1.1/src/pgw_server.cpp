@@ -156,14 +156,17 @@ void readConfig(int ac, char *av[]) {
   po::store(po::parse_command_line(ac, av, desc), vm);
   po::notify(vm);
 
-  if (vm.count(S5_THREADS_COUNT) ||
-      vm.count(SGI_THREADS_COUNT) ||
-      vm.count(SGW_S5_IP) ||
-      vm.count(PGW_S5_IP) ||
-      vm.count(PGW_SGI_IP) ||
-      vm.count(DS_IP) ||
-      vm.count(SINK_IP_ADDR)) {
+  bool reqMissing = false;
+  reqMissing |= vm.find(S5_THREADS_COUNT) == vm.end();
+  reqMissing |= vm.find(SGI_THREADS_COUNT) == vm.end();
+  reqMissing |= vm.find(SGW_S5_IP) == vm.end();
+  reqMissing |= vm.find(PGW_S5_IP) == vm.end();
+  reqMissing |= vm.find(PGW_SGI_IP) == vm.end();
+  reqMissing |= vm.find(DS_IP) == vm.end();
+  reqMissing |= vm.find(SINK_IP_ADDR) == vm.end();
+  if (reqMissing) {
     TRACE(cout << desc << endl;)
+    exit(1);
   }
 
   g_s5_server_threads_count = vm[S5_THREADS_COUNT].as<int>();
