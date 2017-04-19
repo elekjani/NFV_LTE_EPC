@@ -1,5 +1,5 @@
 #include "KVStore.h"
-#define ldb_path "172.19.0.5:8090"
+#define ldb_path "127.0.0.1:8090"
 
 using namespace kvstore;
 using namespace std;
