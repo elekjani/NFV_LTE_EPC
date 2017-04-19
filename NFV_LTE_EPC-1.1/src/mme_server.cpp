@@ -3,6 +3,7 @@
 
 #define THREADS_COUNT "threads_count"
 #define HSS_IP "hss_ip"
+#define MME_IP "mme_ip"
 #define HSS_PORT "hss_port"
 #define SGW_S1_IP "sgw_s1_ip"
 #define SGW_S11_IP "sgw_s11_ip"
@@ -122,6 +123,7 @@ void readConfig(int ac, char *av[]) {
   desc.add_options()
     (THREADS_COUNT, po::value<int>(), "Number of threads")
     (HSS_IP, po::value<string>(), "IP addres of the HSS")
+    (MME_IP, po::value<string>(), "IP addres of the MME")
     (HSS_PORT, po::value<int>()->default_value(g_hss_port), "Port of the HSS")
     (SGW_S1_IP, po::value<string>(), "IP address of SGW's S1 interface")
     (SGW_S11_IP, po::value<string>(), "IP address of SGW's S11 interface")
@@ -144,6 +146,7 @@ void readConfig(int ac, char *av[]) {
 
   if (vm.count(THREADS_COUNT) ||
       vm.count(HSS_IP) ||
+      vm.count(MME_IP) ||
       vm.count(SGW_S1_IP) ||
       vm.count(SGW_S11_IP) ||
       vm.count(SGW_S5_IP) ||
@@ -154,6 +157,7 @@ void readConfig(int ac, char *av[]) {
 
   g_workers_count = vm[THREADS_COUNT].as<int>();
   g_hss_ip_addr =  vm[HSS_IP].as<string>();
+  g_mme_ip_addr =  vm[MME_IP].as<string>();
   g_hss_port = vm[HSS_PORT].as<int>();
 
   g_sgw_s11_ip_addr = vm[SGW_S1_IP].as<string>();
