@@ -40,7 +40,7 @@ void run() {
 	//uplink clients
 	pgw_s5_clients.resize(g_s1_server_threads_count);
 	for (i = 0; i < g_s1_server_threads_count; i++) {
-		pgw_s5_clients[i].conn(g_sgw_s11_ip_addr,g_pgw_s5_ip_addr,g_pgw_s5_port);
+		pgw_s5_clients[i].conn(g_sgw_s5_ip_addr,g_pgw_s5_ip_addr,g_pgw_s5_port);
 	}
 	/* SGW S11 server */
 	TRACE(cout << "SGW S11 server started" << endl;)
