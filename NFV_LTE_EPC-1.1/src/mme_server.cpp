@@ -12,6 +12,7 @@
 #define PGW_S5_IP "pgw_s5_ip"
 #define DS_IP "ds_ip"
 #define DS_PORT "ds_port"
+#define TRAFMON_IP "trafmon_ip"
 
 #define TRAFMON_PORT "trafmon_port"
 #define MME_PORT "mme_port"
@@ -131,6 +132,7 @@ void readConfig(int ac, char *av[]) {
     (SGW_S11_IP, po::value<string>(), "IP address of SGW's S11 interface")
     (SGW_S5_IP, po::value<string>(), "IP address of SGW's S5 interface")
     (PGW_S5_IP, po::value<string>(), "IP address of PGW's S5 interface")
+    (TRAFMON_IP, po::value<string>(), "IP address of the traffic monitor")
     (DS_IP, po::value<string>(), "IP address of datastore")
     (DS_PORT, po::value<int>()->default_value(8090), "Port of the datasoter")
 
@@ -155,6 +157,7 @@ void readConfig(int ac, char *av[]) {
   reqMissing |= vm.find(SGW_S11_IP) == vm.end();
   reqMissing |= vm.find(SGW_S5_IP) == vm.end();
   reqMissing |= vm.find(DS_IP) == vm.end();
+  reqMissing |= vm.find(TRAFMON_IP) == vm.end();
   reqMissing |= vm.find(PGW_S5_IP) == vm.end();
   if (reqMissing) {
     TRACE(cout << desc << endl;)
@@ -172,6 +175,7 @@ void readConfig(int ac, char *av[]) {
   g_sgw_s1_ip_addr = vm[SGW_S1_IP].as<string>();
   g_sgw_s5_ip_addr = vm[SGW_S5_IP].as<string>();
   g_pgw_s5_ip_addr = vm[PGW_S5_IP].as<string>();
+  g_trafmon_ip_addr = vm[TRAFMON_IP].as<string>();
   std::stringstream sstm;
   sstm << vm[DS_IP].as<string>() << ':' << vm[DS_PORT].as<int>();
   dsmme_path = sstm.str();
