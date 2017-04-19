@@ -16,7 +16,8 @@
 #include "utils.h"
 
 extern string g_trafmon_ip_addr;
-extern string g_mme_ip_addr;
+extern string g_mme_s1_ip_addr;
+extern string g_mme_s11_ip_addr;
 extern string g_hss_ip_addr;
 extern string g_sgw_s11_ip_addr;
 extern string g_sgw_s1_ip_addr;

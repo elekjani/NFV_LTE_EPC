@@ -1,7 +1,8 @@
 #include "mme.h"
 
 string g_trafmon_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
-string g_mme_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
+string g_mme_s1_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
+string g_mme_s11_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
 
 string g_hss_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
 string g_sgw_s11_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";

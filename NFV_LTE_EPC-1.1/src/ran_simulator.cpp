@@ -6,7 +6,7 @@
 
 #define RAN_IP_ADDR "ran_ip_addr"
 #define TRAFMON_IP_ADDR "trafmon_ip_addr"
-#define MME_IP_ADDR "mme_ip_addr"
+#define MME_S1_IP_ADDR "mme_s1_ip_addr"
 #define TRAFMON_PORT "trafmon_port"
 #define MME_PORT "mme_port"
 #define SGW_S1_IP_ADDR "sgw_s1_ip_addr"
@@ -174,7 +174,7 @@ void readConfig(int ac, char *av[]) {
     (DURATION, po::value<int>(), "Duration in seconds")
     (RAN_IP_ADDR, po::value<string>(), "IP address of the simulator")
     (TRAFMON_IP_ADDR, po::value<string>(), "IP address of the traffic monitor")
-    (MME_IP_ADDR, po::value<string>(), "IP address of the MME")
+    (MME_S1_IP_ADDR, po::value<string>(), "IP address of the MME's S1 interface")
     (TRAFMON_PORT, po::value<int>()->default_value(g_trafmon_port), "Port of the trraffic monitor")
     (MME_PORT, po::value<int>()->default_value(g_mme_port), "Port of the MME")
     (SGW_S1_IP_ADDR, po::value<string>(), "IP address of SGW's S1 interface")
@@ -189,7 +189,7 @@ void readConfig(int ac, char *av[]) {
   reqMissing |= vm.find(DURATION) == vm.end();
   reqMissing |= vm.find(RAN_IP_ADDR) == vm.end();
   reqMissing |= vm.find(TRAFMON_IP_ADDR) == vm.end();
-  reqMissing |= vm.find(MME_IP_ADDR) == vm.end();
+  reqMissing |= vm.find(MME_S1_IP_ADDR) == vm.end();
   reqMissing |=  vm.find(SGW_S1_IP_ADDR) == vm.end();
   if (reqMissing) {
     TRACE(cout << desc << endl;)
@@ -201,7 +201,7 @@ void readConfig(int ac, char *av[]) {
 
   g_ran_ip_addr = vm[RAN_IP_ADDR].as<string>();
   g_trafmon_ip_addr = vm[TRAFMON_IP_ADDR].as<string>();
-  g_mme_ip_addr = vm[MME_IP_ADDR].as<string>();
+  g_mme_s1_ip_addr = vm[MME_S1_IP_ADDR].as<string>();
   g_trafmon_port = vm[TRAFMON_PORT].as<int>();
   g_mme_port = vm[MME_PORT].as<int>();
   g_sgw_s1_ip_addr = vm[SGW_S1_IP_ADDR].as<string>();

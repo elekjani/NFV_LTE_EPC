@@ -3,7 +3,8 @@
 
 #define THREADS_COUNT "threads_count"
 #define HSS_IP "hss_ip"
-#define MME_IP "mme_ip"
+#define MME_S1_IP "mme_s1_ip"
+#define MME_S11_IP "mme_s11_ip"
 #define HSS_PORT "hss_port"
 #define SGW_S1_IP "sgw_s1_ip"
 #define SGW_S11_IP "sgw_s11_ip"
@@ -39,10 +40,10 @@ void run() {
 
 	for (i = 0; i < g_workers_count; i++) {
 		hss_clients[i].conn(g_hss_ip_addr, g_hss_port);	
-		sgw_s11_clients[i].conn(g_mme_ip_addr, g_sgw_s11_ip_addr, g_sgw_s11_port);
+		sgw_s11_clients[i].conn(g_mme_s11_ip_addr, g_sgw_s11_ip_addr, g_sgw_s11_port);
 	}
 
-	g_mme.server.run(g_mme_ip_addr, g_mme_port, g_workers_count, handle_ue);
+	g_mme.server.run(g_mme_s1_ip_addr, g_mme_port, g_workers_count, handle_ue);
 }
 
 int handle_ue(int conn_fd, int worker_id) {
@@ -123,7 +124,8 @@ void readConfig(int ac, char *av[]) {
   desc.add_options()
     (THREADS_COUNT, po::value<int>(), "Number of threads")
     (HSS_IP, po::value<string>(), "IP addres of the HSS")
-    (MME_IP, po::value<string>(), "IP addres of the MME")
+    (MME_S1_IP, po::value<string>(), "IP addres of the MME's S1 interface")
+    (MME_S11_IP, po::value<string>(), "IP addres of the MME's S11 interface")
     (HSS_PORT, po::value<int>()->default_value(g_hss_port), "Port of the HSS")
     (SGW_S1_IP, po::value<string>(), "IP address of SGW's S1 interface")
     (SGW_S11_IP, po::value<string>(), "IP address of SGW's S11 interface")
@@ -147,7 +149,8 @@ void readConfig(int ac, char *av[]) {
   bool reqMissing = false;
   reqMissing |= vm.find(THREADS_COUNT) == vm.end();
   reqMissing |= vm.find(HSS_IP) == vm.end();
-  reqMissing |= vm.find(MME_IP) == vm.end();
+  reqMissing |= vm.find(MME_S1_IP) == vm.end();
+  reqMissing |= vm.find(MME_S11_IP) == vm.end();
   reqMissing |= vm.find(SGW_S1_IP) == vm.end();
   reqMissing |= vm.find(SGW_S11_IP) == vm.end();
   reqMissing |= vm.find(SGW_S5_IP) == vm.end();
@@ -161,7 +164,8 @@ void readConfig(int ac, char *av[]) {
 
   g_workers_count = vm[THREADS_COUNT].as<int>();
   g_hss_ip_addr =  vm[HSS_IP].as<string>();
-  g_mme_ip_addr =  vm[MME_IP].as<string>();
+  g_mme_s1_ip_addr =  vm[MME_S1_IP].as<string>();
+  g_mme_s11_ip_addr =  vm[MME_S11_IP].as<string>();
   g_hss_port = vm[HSS_PORT].as<int>();
 
   g_sgw_s11_ip_addr = vm[SGW_S11_IP].as<string>();

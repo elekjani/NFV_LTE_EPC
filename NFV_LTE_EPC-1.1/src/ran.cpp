@@ -2,7 +2,7 @@
 
 string g_ran_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
 string g_trafmon_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
-string g_mme_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
+string g_mme_s1_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
 int g_trafmon_port = 4000;
 int g_mme_port = 5000;
 string g_sgw_s1_ip_addr = "INVALID_IP_MUST_BE_INIT_WITH_CLI";
@@ -54,7 +54,7 @@ RanContext::~RanContext() {
 EpcAddrs::EpcAddrs() {
 	mme_port = g_mme_port;
 	sgw_s1_port = 0;
-	mme_ip_addr = g_mme_ip_addr;	
+	mme_ip_addr = g_mme_s1_ip_addr;	
 	sgw_s1_ip_addr = "";
 }
 
