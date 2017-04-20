@@ -1,7 +1,9 @@
 #include "ran_simulator.h"
+#include "boost/program_options.hpp"
 
 #define THREADS_COUNT "threads_count"
 #define DURATION "duration"
+#define RATE "rate"
 
 #define RAN_IP_ADDR "ran_ip_addr"
 #define TRAFMON_IP_ADDR "trafmon_ip_addr"
@@ -14,6 +16,7 @@
 time_t g_start_time;
 int g_threads_count;
 uint64_t g_req_dur;
+uint64_t g_req_rate;
 uint64_t g_run_dur;
 int g_tot_regs;
 uint64_t g_tot_regstime;
@@ -96,7 +99,7 @@ void simulate(int arg) {
 		 					return;
 		}
 
-		///*
+		/*
 		// To find RTT
 		if (ran_num == 0) {
 			g_rtt_thread = thread(ping);
@@ -105,7 +108,7 @@ void simulate(int arg) {
 
 
 		/* Data transfer */
-		ran.transfer_data(g_req_dur);
+		ran.transfer_data(g_req_dur, g_req_rate);
 
 		// Detach
 		ok = ran.detach();
@@ -201,6 +204,7 @@ void readConfig(int ac, char *av[]) {
   desc.add_options()
     (THREADS_COUNT, po::value<int>(), "Number of threads")
     (DURATION, po::value<int>(), "Duration in seconds")
+    (RATE, po::value<int>(), "Rate of sent traffic by iperf in Mbps")
     (RAN_IP_ADDR, po::value<string>(), "IP address of the simulator")
     (TRAFMON_IP_ADDR, po::value<string>(), "IP address of the traffic monitor")
     (MME_IP_ADDR, po::value<string>(), "IP address of the MME")
@@ -216,6 +220,7 @@ void readConfig(int ac, char *av[]) {
   bool reqMissing = false;
   reqMissing |= vm.find(THREADS_COUNT) == vm.end();
   reqMissing |= vm.find(DURATION) == vm.end();
+  reqMissing |= vm.find(RATE) == vm.end();
   reqMissing |= vm.find(RAN_IP_ADDR) == vm.end();
   reqMissing |= vm.find(TRAFMON_IP_ADDR) == vm.end();
   reqMissing |= vm.find(MME_IP_ADDR) == vm.end();
@@ -226,6 +231,7 @@ void readConfig(int ac, char *av[]) {
   }
 
   g_req_dur = vm[DURATION].as<int>();;
+  g_req_rate = vm[RATE].as<int>();;
   g_threads_count = vm[THREADS_COUNT].as<int>();;
 
   g_ran_ip_addr = vm[RAN_IP_ADDR].as<string>();
@@ -239,8 +245,8 @@ void readConfig(int ac, char *av[]) {
 
 int main(int argc, char *argv[]) {
   readConfig(argc, argv);
-	init();
-	run();
-	print_results();
-	return 0;
+  init();
+  run();
+  print_results();
+  return 0;
 }

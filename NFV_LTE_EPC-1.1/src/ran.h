@@ -148,7 +148,7 @@ public:
 	bool authenticate();
 	bool set_security();
 	bool set_eps_session(TrafficMonitor&);
-	void transfer_data(int);
+	void transfer_data(int, int);
 	bool detach();	
 };
 

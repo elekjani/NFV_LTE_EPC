@@ -49,7 +49,7 @@ ran.o:	diameter.h gtp.h network.h packet.h ran.cpp ran.h s1ap.h sctp_client.h se
 	$(G++) -c -o ran.o ran.cpp
 
 ran_simulator.o:	diameter.h gtp.h network.h packet.h ran.h ran_simulator_data.cpp ran_simulator.h s1ap.h sctp_client.h security.h sync.h telecom.h tun.h udp_client.h udp_server.h utils.h
-	$(G++) -c -o ran_simulator.o ran_simulator.cpp
+	$(G++) -c -o ran_simulator.o ran_simulator_data.cpp
 
 s1ap.o:	s1ap.cpp s1ap.h utils.h
 	$(G++) -c -o s1ap.o s1ap.cpp
