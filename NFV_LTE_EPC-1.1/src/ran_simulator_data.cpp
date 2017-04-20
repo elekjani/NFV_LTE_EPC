@@ -13,6 +13,9 @@
 #define SGW_S1_IP_ADDR "sgw_s1_ip_addr"
 #define SGW_S1_PORT "sgw_s1_port"
 
+#define UE_IMSI "ue_imsi"
+#define MAX_IMSI 100000
+
 time_t g_start_time;
 int g_threads_count;
 uint64_t g_req_dur;
@@ -27,6 +30,7 @@ vector<thread> g_threads;
 thread g_rtt_thread;
 TrafficMonitor g_traf_mon;
 
+int ue_imsi;
 
 void utraffic_monitor() {
 
@@ -175,7 +179,7 @@ void run() {
 
 	// Simulator threads */
 	for (i = 0; i < g_threads_count; i++) {
-		g_threads[i] = thread(simulate, i);
+		g_threads[i] = thread(simulate, (ue_imsi + i) % MAX_IMSI);
 	}	
 	for (i = 0; i < g_threads_count; i++) {
 		if (g_threads[i].joinable()) {
@@ -202,7 +206,7 @@ void readConfig(int ac, char *av[]) {
 
   po::options_description desc("Allowed options");
   desc.add_options()
-    (THREADS_COUNT, po::value<int>(), "Number of threads")
+    (THREADS_COUNT, po::value<int>()->default_value(1), "Number of threads")
     (DURATION, po::value<int>(), "Duration in seconds")
     (RATE, po::value<int>(), "Rate of sent traffic by iperf in Mbps")
     (RAN_IP_ADDR, po::value<string>(), "IP address of the simulator")
@@ -212,6 +216,7 @@ void readConfig(int ac, char *av[]) {
     (MME_PORT, po::value<int>()->default_value(g_mme_port), "Port of the MME")
     (SGW_S1_IP_ADDR, po::value<string>(), "IP address of SGW's S1 interface")
     (SGW_S1_PORT, po::value<int>()->default_value(sgw_s1_port), "Port of SGW's S1 interface")
+    (UE_IMSI, po::value<int>()->default_value(-1), "IMSI from the range 0 - 100,000")
     ;
   po::variables_map vm;
   po::store(po::parse_command_line(ac, av, desc), vm);
@@ -241,6 +246,15 @@ void readConfig(int ac, char *av[]) {
   g_mme_port = vm[MME_PORT].as<int>();
   g_sgw_s1_ip_addr = vm[SGW_S1_IP_ADDR].as<string>();
   sgw_s1_port = vm[SGW_S1_PORT].as<int>();
+  ue_imsi = vm[UE_IMSI].as<int>();
+
+  if(ue_imsi < 0) {
+    std::random_device r;
+    std::default_random_engine e(r());
+    std::uniform_int_distribution<int> uniform_dist(0,MAX_IMSI);
+    ue_imsi = uniform_dist(e);
+    cout << "Selected IMSI: " << ue_imsi << endl;
+  }
 }
 
 int main(int argc, char *argv[]) {

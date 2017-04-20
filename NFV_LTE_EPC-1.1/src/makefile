@@ -48,8 +48,12 @@ pgw_server.o:	diameter.h gtp.h network.h packet.h pgw.h pgw_server.cpp pgw_serve
 ran.o:	diameter.h gtp.h network.h packet.h ran.cpp ran.h s1ap.h sctp_client.h security.h sync.h telecom.h tun.h udp_client.h udp_server.h utils.h
 	$(G++) -c -o ran.o ran.cpp
 
-ran_simulator.o:	diameter.h gtp.h network.h packet.h ran.h ran_simulator_data.cpp ran_simulator.h s1ap.h sctp_client.h security.h sync.h telecom.h tun.h udp_client.h udp_server.h utils.h
-	$(G++) -c -o ran_simulator.o ran_simulator_data.cpp
+ran_simulator.o:	diameter.h gtp.h network.h packet.h ran.h ran_simulator.cpp ran_simulator.h s1ap.h sctp_client.h security.h sync.h telecom.h tun.h udp_client.h udp_server.h utils.h
+	$(G++) -c -o ran_simulator.o ran_simulator.cpp
+
+ran_simulator_data.o:	diameter.h gtp.h network.h packet.h ran.h ran_simulator_data.cpp ran_simulator.h s1ap.h sctp_client.h security.h sync.h telecom.h tun.h udp_client.h udp_server.h utils.h
+	$(G++) -c -o ran_simulator_data.o ran_simulator_data.cpp
+
 
 s1ap.o:	s1ap.cpp s1ap.h utils.h
 	$(G++) -c -o s1ap.o s1ap.cpp
@@ -107,7 +111,7 @@ MME_R = $(G++) -o mme.out $(MME_P) -pthread -lcrypto -lboost_serialization -Wno-
 PGW_P = diameter.o gtp.o network.o packet.o pgw.o pgw_server.o s1ap.o sync.o udp_client.o udp_server.o utils.o
 PGW_R = $(G++) -o pgw.out $(PGW_P) -pthread -Wno-deprecated -lboost_serialization -lkvstore -lboost_program_options
 
-RAN_P = diameter.o gtp.o network.o packet.o ran.o ran_simulator.o s1ap.o sctp_client.o security.o sync.o telecom.o tun.o udp_client.o udp_server.o utils.o
+RAN_P = diameter.o gtp.o network.o packet.o ran.o ran_simulator_data.o s1ap.o sctp_client.o security.o sync.o telecom.o tun.o udp_client.o udp_server.o utils.o
 RAN_R = $(G++) -o ransim.out $(RAN_P) -pthread -lcrypto -lboost_program_options
 
 SGW_P = diameter.o gtp.o network.o packet.o s1ap.o sgw.o sgw_server.o sync.o udp_client.o udp_server.o utils.o
