@@ -5,15 +5,15 @@ SctpServer::SctpServer() {
 	g_utils.handle_type1_error(listen_fd, "Socket error: sctpserver_sctpserver");
 }
 
-void SctpServer::run(string arg_ip_addr, int arg_port, int arg_workers_count, int serve_client(int, int)) {
-	init(arg_ip_addr, arg_port, arg_workers_count, serve_client);
+void SctpServer::run(string arg_ip_addr, int arg_port, int arg_workers_count, SctpServer::serve_client_t sc) {
+	init(arg_ip_addr, arg_port, arg_workers_count, sc);
 	create_workers();
 	g_nw.set_sock_reuse(listen_fd);
 	g_nw.bind_sock(listen_fd, sock_addr);
 	accept_clients();
 }
 
-void SctpServer::init(string arg_ip_addr, int arg_port, int arg_workers_count, int arg_serve_client(int, int)) {
+void SctpServer::init(string arg_ip_addr, int arg_port, int arg_workers_count, SctpServer::serve_client_t sc) {
 	int status;
 
 	port = arg_port;
@@ -21,7 +21,7 @@ void SctpServer::init(string arg_ip_addr, int arg_port, int arg_workers_count, i
 	g_nw.set_inet_sock_addr(ip_addr, port, sock_addr);
 	workers_count = arg_workers_count;	
 	workers.resize(workers_count);
-	serve_client = arg_serve_client;
+	serve_client = sc;
 	init_pipe_fds();
 }
 
@@ -52,12 +52,15 @@ void SctpServer::worker_func(int worker_id) {
 	int status;
 	int pipe_fd;
 	int new_conn_fd;
+	int new_conn_ip;
 	int conn_fds_size;
 	vector<int> conn_fds;
+  vector<int> conn_ips;
 	fd_set fds;
 	Packet pkt;
 
 	new_conn_fd = 0;
+	new_conn_ip = 0;
 	pipe_fd = pipe_fds[worker_id][0];
 	max_fd = pipe_fd;
 	while (1) {
@@ -87,7 +90,9 @@ void SctpServer::worker_func(int worker_id) {
 			status = g_nw.read_sctp_pkt(pipe_fd, pkt);
 			g_utils.handle_type1_error(status, "Read connection fd error: sctpserver_workerfunc");
 			pkt.extract_item(new_conn_fd);
+			pkt.extract_item(new_conn_ip);
 			conn_fds.push_back(new_conn_fd);
+      conn_ips.push_back(new_conn_ip);
 			max_fd = max(max_fd, new_conn_fd);
 			new_conn_fd = 0;
 		}
@@ -96,12 +101,13 @@ void SctpServer::worker_func(int worker_id) {
 
 			status = 1;
 			if (FD_ISSET(conn_fds[i], &fds)) {
-				status = serve_client(conn_fds[i], worker_id);
+				status = serve_client(conn_fds[i], conn_ips[i], worker_id);
 			}
 
 			if (status == 0) {
 				close(conn_fds[i]);
 				conn_fds.erase(conn_fds.begin() + i);
+        conn_ips.erase(conn_ips.begin() + i);
 				conn_fds_size--;
 				max_fd = max(pipe_fd, g_utils.max_ele(conn_fds));						
 			}
@@ -127,6 +133,7 @@ void SctpServer::accept_clients() {
 		g_utils.handle_type1_error(conn_fd, "Accept error: sctpserver_acceptclients");
 		pkt.clear_pkt();
 		pkt.append_item(conn_fd);
+		pkt.append_item(client_sock_addr.sin_addr.s_addr);
 		status = g_nw.write_sctp_pkt(pipe_fds[turn][1], pkt);
 		g_utils.handle_type1_error(status, "Thread communication error: sctpserver_acceptclients");
 		turn = ((turn + 1) % workers_count);

@@ -23,6 +23,5 @@ extern vector<UdpClient> sgw_s11_clients;
 void check_usage(int);
 void init(char**);
 void run();
-int handle_ue(int, int);
 
 #endif /* MME_SERVER_H */

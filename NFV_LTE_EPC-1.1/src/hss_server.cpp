@@ -17,15 +17,7 @@ void init() {
 
 }
 
-
-void run() {
-
-	/* HSS server */
-	TRACE(cout << "HSS server started" << endl;)
-			g_hss.server.run(g_hss_ip_addr, g_hss_port, g_workers_count, handle_mme);
-}
-
-int handle_mme(int conn_fd, int worker_id) {
+int handle_mme(int conn_fd, unsigned int ip, int worker_id) {
 	Packet pkt;
 
 	g_hss.server.rcv(conn_fd, pkt);
@@ -53,6 +45,12 @@ int handle_mme(int conn_fd, int worker_id) {
 		break;
 	}
 	return 1;
+}
+
+void run() {
+	/* HSS server */
+	TRACE(cout << "HSS server started" << endl;)
+			g_hss.server.run(g_hss_ip_addr, g_hss_port, g_workers_count, handle_mme);
 }
 
 void finish() {

@@ -9,6 +9,8 @@
 #include "utils.h"
 
 class SctpServer {
+public:
+  typedef int (*serve_client_t)(int, unsigned int, int);
 private:
 	/* Address parameters */
 	int listen_fd;
@@ -19,12 +21,12 @@ private:
 	/* Thread pool parameters */
 	int workers_count;
 	vector<thread> workers;	
-	int (*serve_client)(int, int);
+  SctpServer::serve_client_t serve_client;
 
 	/* Pipe parameter - for communication between main thread and worker threads */
 	vector<int*> pipe_fds;
 
-	void init(string, int, int, int (*)(int, int));
+	void init(string, int, int, SctpServer::serve_client_t);
 	void init_pipe_fds();
 	void create_workers();
 	void worker_func(int);
@@ -32,7 +34,7 @@ private:
 	
 public:
 	SctpServer();
-	void run(string, int, int, int (*)(int, int));
+	void run(string, int, int, SctpServer::serve_client_t);
 	void snd(int, Packet);
 	void rcv(int, Packet&);
 	~SctpServer();

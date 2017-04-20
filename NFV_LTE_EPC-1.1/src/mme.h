@@ -171,7 +171,7 @@ public:
 	void handle_location_update(Packet, SctpClient&,int);
 	void handle_create_session(int, Packet, UdpClient&,int);
 	void handle_attach_complete(Packet,int);
-	void handle_modify_bearer(int,Packet, UdpClient&,int);
+	void handle_modify_bearer(int, unsigned int, Packet, UdpClient&,int);
 	void handle_detach(int, Packet, UdpClient&,int);
 	UeContext get_context(uint64_t guti);
 

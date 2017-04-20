@@ -34,20 +34,7 @@ void init() {
 	signal(SIGPIPE, SIG_IGN);
 }
 
-void run() {
-	int i;
-
-	TRACE(cout << "MME server started" << endl;)
-
-	for (i = 0; i < g_workers_count; i++) {
-		hss_clients[i].conn(g_hss_ip_addr, g_hss_port);	
-		sgw_s11_clients[i].conn(g_mme_s11_ip_addr, g_sgw_s11_ip_addr, g_sgw_s11_port);
-	}
-
-	g_mme.server.run(g_mme_s1_ip_addr, g_mme_port, g_workers_count, handle_ue);
-}
-
-int handle_ue(int conn_fd, int worker_id) {
+int handle_ue(int conn_fd, unsigned int ip, int worker_id) {
 	bool res;
 	Packet pkt;
 
@@ -97,7 +84,7 @@ int handle_ue(int conn_fd, int worker_id) {
 			TRACE(cout << "mmeserver_handleue:" << " case 4: attach complete" << endl;)
 
 			g_mme.handle_attach_complete(pkt,worker_id);
-			g_mme.handle_modify_bearer(conn_fd, pkt, sgw_s11_clients[worker_id],worker_id);
+			g_mme.handle_modify_bearer(conn_fd, ip, pkt, sgw_s11_clients[worker_id],worker_id);
 			break;
 
 			/* Detach request */
@@ -115,6 +102,19 @@ int handle_ue(int conn_fd, int worker_id) {
 		}				
 	}		
 	return 1;
+}
+
+void run() {
+	int i;
+
+	TRACE(cout << "MME server started" << endl;)
+
+	for (i = 0; i < g_workers_count; i++) {
+		hss_clients[i].conn(g_hss_ip_addr, g_hss_port);	
+		sgw_s11_clients[i].conn(g_mme_s11_ip_addr, g_sgw_s11_ip_addr, g_sgw_s11_port);
+	}
+
+	g_mme.server.run(g_mme_s1_ip_addr, g_mme_port, g_workers_count, handle_ue);
 }
 
 void readConfig(int ac, char *av[]) {

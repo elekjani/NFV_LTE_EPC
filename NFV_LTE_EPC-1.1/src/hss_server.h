@@ -18,7 +18,6 @@ extern int g_workers_count;
 void check_usage(int);
 void init(char**);
 void run();
-int handle_mme(int, int);
 void finish();
 
 #endif //HSS_SERVER_H

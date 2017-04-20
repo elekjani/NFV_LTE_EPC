@@ -615,7 +615,7 @@ void Mme::handle_attach_complete(Packet pkt, int worker_id) {
 	TRACE(cout << "mme_handleattachcomplete:" << " attach completed: " << guti << endl;)
 }
 
-void Mme::handle_modify_bearer(int conn_fd,Packet pkt, UdpClient &sgw_client, int worker_id) {
+void Mme::handle_modify_bearer(int conn_fd, unsigned int ip, Packet pkt, UdpClient &sgw_client, int worker_id) {
 	uint64_t guti;
 	uint32_t s1_uteid_dl;
 	uint32_t s11_cteid_sgw;
@@ -639,6 +639,9 @@ void Mme::handle_modify_bearer(int conn_fd,Packet pkt, UdpClient &sgw_client, in
 	pkt.clear_pkt();
 	pkt.append_item(eps_bearer_id);
 	pkt.append_item(s1_uteid_dl);
+  char *c_ip = inet_ntoa(in_addr{ip});
+  int c_ip_len = strlen(c_ip);
+  g_trafmon_ip_addr.assign(c_ip, c_ip_len);
 	pkt.append_item(g_trafmon_ip_addr);
 	pkt.append_item(g_trafmon_port);
 	pkt.prepend_gtp_hdr(2, 2, pkt.len, s11_cteid_sgw);
