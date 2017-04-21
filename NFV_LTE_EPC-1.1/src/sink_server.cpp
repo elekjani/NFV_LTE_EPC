@@ -98,10 +98,13 @@ void readConfig(int ac, char *av[]) {
   po::store(po::parse_command_line(ac, av, desc), vm);
   po::notify(vm);
 
-  if (vm.count(THREADS_COUNT) ||
-      vm.count(PGW_SGI_IP_ADDR) ||
-      vm.count(SINK_IP_ADDR)) {
+  bool reqMissing = false;
+  reqMissing |= vm.find(THREADS_COUNT) == vm.end();
+  reqMissing |= vm.find(PGW_SGI_IP_ADDR) == vm.end();
+  reqMissing |= vm.find(SINK_IP_ADDR) == vm.end();
+  if (reqMissing) {
     TRACE(cout << desc << endl;)
+    exit(1);
   }
 
   g_threads_count = vm[THREADS_COUNT].as<int>();

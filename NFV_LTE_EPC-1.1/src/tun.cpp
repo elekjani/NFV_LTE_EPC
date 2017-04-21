@@ -60,7 +60,8 @@ void Tun::set_itf(string name, string ip_addr_sp) {
 	mktun = "sudo openvpn --mktun --dev " + name;
 	itf_up = "sudo ip link set " + name + " up";
 	add_addr = "sudo ip addr add " + ip_addr_sp + " dev " + name;
-	set_mtu = "sudo ifconfig " + name + " mtu " + to_string(8000);
+	//set_mtu = "sudo ifconfig " + name + " mtu " + to_string(8000);
+	set_mtu = "sudo ip link set " + name + " mtu " + to_string(8000);
 	system(rmtun.c_str());
 	system(mktun.c_str());
 	system(itf_up.c_str());

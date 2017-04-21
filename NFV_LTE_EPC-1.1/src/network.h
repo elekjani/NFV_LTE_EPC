@@ -42,6 +42,8 @@ class Network {
 private:
 	int read_stream(int, uint8_t*, int);
 	int write_stream(int, uint8_t*, int);
+
+  map<int, string> itf_no_to_ip;
 	
 public:
 	void set_inet_sock_addr(string, int, struct sockaddr_in&);
