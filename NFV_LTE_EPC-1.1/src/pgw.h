@@ -79,9 +79,13 @@ private:
 	pthread_mutex_t s5id_mux; /* Handles s5_id */
 	pthread_mutex_t sgiid_mux; /* Handles sgi_id */
 	pthread_mutex_t uectx_mux; /* Handles ue_ctx */
+
+	const string ippool_prefix = "172.16.";
+	int ippool_subnet;
+	int ippool_host;
 	
 	void clrstl();
-	void set_ip_addrs();
+	string get_ip_addr(uint64_t);
 	void update_itfid(int, uint32_t, string, uint64_t);
 	uint64_t get_imsi(int, uint32_t, string);
 	bool get_downlink_info(uint64_t, uint32_t&);	

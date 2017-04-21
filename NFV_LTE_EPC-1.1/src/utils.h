@@ -58,9 +58,6 @@ typedef std::chrono::microseconds MICROSECONDS;
 
 #define TRACE(x) if (DEBUG) { x }
 
-const int MAX_UE_COUNT = 10000;
-
-
 class Utils {
 public:
 	void handle_type1_error(int, string);

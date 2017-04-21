@@ -44,17 +44,14 @@ void UeContext::serialize(Archive &ar, const unsigned int version)
 }
 
 Pgw::Pgw() {
-
-
-
 	clrstl();
-	set_ip_addrs();
+  ippool_subnet = 1;
+  ippool_host = 3;
 	g_sync.mux_init(s5id_mux);	
 	g_sync.mux_init(sgiid_mux);	
 	g_sync.mux_init(uectx_mux);	
-
-
 }
+
 void Pgw::initialize_kvstore_clients(int workers_count){
 
 	ds_sgi_id.resize(workers_count);
@@ -96,7 +93,7 @@ void Pgw::handle_create_session(struct sockaddr_in src_sock_addr, Packet pkt,int
 	pkt.extract_item(tai);
 	s5_cteid_ul = s5_cteid_dl;
 	s5_uteid_ul = s5_cteid_dl;
-	ue_ip_addr = ip_addrs[imsi];
+	ue_ip_addr = get_ip_addr(imsi);
 
 	UeContext local_ue_ctx;
 	local_ue_ctx.init(ue_ip_addr, tai, apn_in_use, eps_bearer_id, s5_uteid_ul, s5_uteid_dl, s5_cteid_ul, s5_cteid_dl);
@@ -190,29 +187,26 @@ void Pgw::handle_detach(struct sockaddr_in src_sock_addr, Packet pkt,int worker_
 	TRACE(cout << "pgw_handledetach:" << " detach successful: " << imsi << endl;)
 }
 
-void Pgw::set_ip_addrs() {
-	uint64_t imsi;
+string Pgw::get_ip_addr(uint64_t imsi) {
 	int i;
-	int subnet;
-	int host;
-	string prefix;
 	string ip_addr;
+  
+  auto it = ip_addrs.find(imsi);
+  if(it == ip_addrs.end()) {
+    ip_addr = ippool_prefix + to_string(ippool_subnet) + "." + to_string(ippool_host);
+    ip_addrs[imsi] = ip_addr;
+    if (ippool_host == 254) {
+      ippool_subnet++;
+      ippool_host = 3;
+    }
+    else {
+      ippool_host++;
+    }
+  } else {
+    ip_addr = it->second;
+  }
 
-	prefix = "172.16.";
-	subnet = 1;
-	host = 3;
-	for (i = 0; i < MAX_UE_COUNT; i++) {
-		imsi = 119000000000 + i;
-		ip_addr = prefix + to_string(subnet) + "." + to_string(host);
-		ip_addrs[imsi] = ip_addr;
-		if (host == 254) {
-			subnet++;
-			host = 3;
-		}
-		else {
-			host++;
-		}
-	}
+  return ip_addr;
 }
 
 void Pgw::update_itfid(int itf_id_no, uint32_t teid, string ue_ip_addr, uint64_t imsi) {

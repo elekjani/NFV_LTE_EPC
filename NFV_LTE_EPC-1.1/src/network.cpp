@@ -105,6 +105,7 @@ void Network::add_itf(int itf_no, string ip_addr_sp) {
 
   //cmd = "sudo ifconfig eth0:" + to_string(itf_no) + " " + ip_addr_sp;
   cmd = "sudo ip addr add " + ip_addr_sp + " dev eth0";
+  TRACE(cout << cmd << endl;)
 	system(cmd.c_str());
   itf_no_to_ip[itf_no] = ip_addr_sp;
 }
@@ -114,6 +115,7 @@ void Network::rem_itf(int itf_no) {
 
 	//cmd = "sudo ifconfig eth0:" + to_string(itf_no) + " down";
   cmd = "sudo ip addr del " + itf_no_to_ip[itf_no] + " dev eth0";
+  TRACE(cout << cmd << endl;)
 	system(cmd.c_str());
 }
 
